@@ -23,15 +23,15 @@ const loadData =() => {
 }
 
 // Обновленная функция обработки запросов
-router.post('/:id', (req, res) => {
-  const { id } = req.params;
+router.post('/:bookId/incr', (req, res) => {
+  const { bookId } = req.params;
   const data = loadData();
   if (!data) return
 
-  if (!data[id]) {
-      data[id] = 1;
+  if (!data[bookId]) {
+      data[bookId] = 1;
   } else {
-    data[id]++
+    data[bookId]++
   }
 
   saveData(data); // Сохраняем изменения в файл после каждого запроса
@@ -39,4 +39,21 @@ router.post('/:id', (req, res) => {
 });
 
 
+router.get('/:bookId', (req, res) => {
+  const { bookId } = req.params;
+  const data = loadData();
+  if (!data) {
+    res.status(404);
+    res.json("404 | ошибка загрузки JSON");
+  }
+
+
+  if (!data[bookId]) {
+    res.status(404);
+    res.json("404 | Такой книги нет");
+  } 
+
+
+  res.json(data[bookId]);
+});
 
